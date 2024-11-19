@@ -1,0 +1,103 @@
+/* Contenedor principal */
+.listar-usuarios {
+    padding: 20px;
+    text-align: center;
+  }
+  
+  /* Estilo específico para ciertos componentes */
+.contenedor-formulario {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 20px;
+  text-align: center;
+}
+
+  .table-container {
+    display: flex;
+    justify-content: center;  /* Centra la tabla horizontalmente */
+    width: 100%;
+    overflow-x: auto;  /* Asegura que la tabla sea desplazable si es más ancha que la pantalla */
+  }
+  
+  /* Título y subtítulo */
+  .titulo {
+    font-size: 24px;
+    margin-bottom: 10px;
+  }
+  
+  .subtitulo {
+    font-size: 18px;
+    margin-bottom: 20px;
+    font-weight: bold;
+    color: #666;
+
+  }
+  
+  /* Tabla de usuarios */
+  .tabla-usuarios {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    border-collapse: collapse;
+    table-layout: fixed;
+    
+  }
+  
+  /* Celdas */
+  .tabla-usuarios th, .tabla-usuarios td {
+    padding: 12px;
+    border: 1px solid #ddd;
+    text-align: center;
+    word-wrap: break-word; 
+    vertical-align: middle;
+  }
+  
+  .tabla-usuarios th {
+    background-color: #f4f4f4;
+  }
+  
+
+
+  /* Botones de acción */
+  .btn-accion {
+    padding: 8px 16px;
+    margin: 5px;
+    cursor: pointer;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    display: inline-block;
+    width: auto; 
+  }
+  
+  .btn-accion:hover {
+    background-color: #45a049;
+  }
+  
+  /* Botón de volver */
+  .volver-button {
+    padding: 10px 20px;
+    margin-bottom: 20px;
+    background-color: #2196F3;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .volver-button:hover {
+    background-color: #0b7dda;
+  }
+  
+  /* Media queries para pantallas pequeñas */
+@media (max-width: 768px) {
+  .tabla-usuarios {
+    width: 100%;
+    font-size: 14px; /* Reducir el tamaño de la fuente en dispositivos pequeños */
+  }
+
+  .tabla-usuarios th, .tabla-usuarios td {
+    padding: 10px; /* Reducir el espacio de las celdas */
+  }
+}

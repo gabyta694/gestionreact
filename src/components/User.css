@@ -1,0 +1,35 @@
+.user-container {
+    text-align: center;
+    margin: 20px;
+  }
+  
+  .icon-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    margin-top: 20px;
+  }
+  
+  .icon-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .icon-item h3 {
+    margin-bottom: 10px;
+  }
+  
+  .icon-image {
+    width: 80px; /* Ajusta el tamaño de las imágenes según sea necesario */
+    height: 80px;
+    margin-bottom: 10px;
+  }
+  
+  .icon-item a {
+    color: blue;
+    text-decoration: underline;
+    font-size: 0.9em;
+  }
+  
+  
