@@ -4,26 +4,48 @@ import { useNavigate } from 'react-router-dom';
 import './ListarFormulario.css';
 
 const ListarDesempeno = () => {
-  const [desempeño, setDesempeño]= useState([]);
+  const [desempeño, setDesempeño] = useState([]);
   const [mensaje, setMensaje] = useState('');
   const navigate = useNavigate();
   
-  // Cargar evaluacion desde la API
+  // Obtener el rol y el ID del usuario desde el localStorage
+  const userRole = localStorage.getItem('userRole');
+  const userId = localStorage.getItem('id_usuario');
+
+  // Cargar evaluación desde la API
   useEffect(() => {
     const obtenerDesempeño = async () => {
-      try {
-        const response = await axios.get(`${process.env.REACT_APP_API_URL}/evaluaciones`);
-        console.log('Desempeño obtenido:', response.data); 
-        setDesempeño(response.data);
-      } catch (error) {
-        console.error('Error al obtener el desempeño:', error);
-        setMensaje('Error al cargar el desempeño');
-      }
-    };
+      const userId = localStorage.getItem('id_usuario');
+      const userRole = localStorage.getItem('userRole');
+  
+      console.log("ID Usuario:", userId);  // Verifica el id del usuario
+      console.log("Rol Usuario:", userRole); // Verifica el rol del usuario
+  
+  try {
+    const response = await axios.get(`${process.env.REACT_APP_API_URL}/evaluaciones`, {
+      params: { userRole, userId }  // Enviando los parámetros de filtro
+    });
+    
+    console.log('Desempeño obtenido:', response.data);  // Verifica si los datos están completos
+
+    if (userRole === 'admin') {
+      setDesempeño(response.data);  // El admin ve todos los desempeños
+    } else {
+      // El usuario normal solo ve su propio desempeño
+      const filteredDesempeno = response.data.filter(item => item.id_usuario === parseInt(userId));
+      console.log('Desempeño filtrado para el usuario:', filteredDesempeno);  // Verifica los datos filtrados
+      setDesempeño(filteredDesempeno);
+    }
+  } catch (error) {
+    console.error('Error al obtener el desempeño:', error);
+    setMensaje('Error al cargar el desempeño');
+  }
+};
+  
     obtenerDesempeño();
   }, []);
-
-  // Función para eliminar un desempeño
+  
+    // Función para eliminar un desempeño
   const eliminarDesempeño = (id) => {
     console.log("Eliminando desempeño con ID:", id);  
   
@@ -31,8 +53,8 @@ const ListarDesempeno = () => {
       axios.delete(`${process.env.REACT_APP_API_URL}/evaluacion/${id}`)
         .then((response) => {
           console.log('Desempeño eliminado:', response.data);
-          // Filtra el desempeño eliminada de la lista en el frontend
-          setDesempeño(prevDesempeño => prevDesempeño.filter(evaluacion => evaluacion.id_evaluacion!== id));
+          // Filtra el desempeño eliminado de la lista en el frontend
+          setDesempeño(prevDesempeño => prevDesempeño.filter(evaluacion => evaluacion.id_evaluacion !== id));
         })
         .catch((error) => {
           console.error('Error al eliminar el desempeño:', error);
@@ -42,11 +64,9 @@ const ListarDesempeno = () => {
     }
   };
   
-  
   // Función para volver a la pantalla principal dependiendo del rol
   const handleVolver = () => {
-    const storedRole = localStorage.getItem('userRole');
-    if (storedRole === 'admin') {
+    if (userRole === 'admin') {
       navigate('/admin'); // Redirige al admin
     } else {
       navigate('/user'); // Redirige al usuario normal
@@ -90,15 +110,17 @@ const ListarDesempeno = () => {
               <td>{evaluacion.comentarios}</td> 
               <td>{evaluacion.fecha_evaluacion}</td> 
               <td>
-              <button
-            onClick={() => navigate(`/actualizardesempeno/${evaluacion.id_evaluacion}`)}
-            className="btn-accion"
-          >
-            Actualizar
-          </button>
-                <button onClick={() => eliminarDesempeño(evaluacion.id_evaluacion)}>
-              Eliminar
-            </button>
+                <button
+                  onClick={() => navigate(`/actualizardesempeno/${evaluacion.id_evaluacion}`)}
+                  className="btn-accion"
+                >
+                  Actualizar
+                </button>
+                {userRole === 'admin' && (
+                  <button onClick={() => eliminarDesempeño(evaluacion.id_evaluacion)}>
+                    Eliminar
+                  </button>
+                )}
               </td>
             </tr>
           ))}

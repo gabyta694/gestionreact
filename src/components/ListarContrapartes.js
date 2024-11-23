@@ -42,8 +42,6 @@ const ListarContrapartes = () => {
     }
   };
   
-  
-
   // Función para volver a la pantalla principal dependiendo del rol
   const handleVolver = () => {
     const storedRole = localStorage.getItem('userRole');

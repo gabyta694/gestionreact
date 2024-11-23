@@ -22,6 +22,15 @@ const AgregarProyectos = () => {
             return;
         }
 
+        // Validación: fechaFin debe ser mayor que fechaInicio
+        const fechaInicioDate = new Date(fecha_inicio);
+        const fechaFinDate = new Date(fecha_fin);
+
+        if (fechaFinDate <= fechaInicioDate) {
+            alert('La fecha de fin debe ser posterior a la fecha de inicio');
+            return;
+        }
+
         try {
             // Enviar los datos al backend
             const response = await axios.post(`${process.env.REACT_APP_API_URL}/proyecto`, {

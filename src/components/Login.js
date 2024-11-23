@@ -1,4 +1,3 @@
-// src/components/Login.js
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom'; // Asegúrate de importar useNavigate
 import axios from 'axios';
@@ -23,6 +22,7 @@ const Login = () => {
       localStorage.setItem('token', response.data.token);
       localStorage.setItem('userRole', response.data.user.rol);
       localStorage.setItem('nombre_usuario', response.data.user.nombre_usuario);
+      localStorage.setItem('id_usuario', response.data.user.id_usuario);
       
       // Obtén el rol desde la estructura correcta
       const userRole = response.data.user.rol;

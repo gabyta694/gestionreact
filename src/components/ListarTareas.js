@@ -3,18 +3,23 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import './ListarFormulario.css';
 
-
 const ListarTareas = () => {
-  const [tareas, setTareas]= useState([]);
+  const [tareas, setTareas] = useState([]);
   const [mensaje, setMensaje] = useState('');
   const navigate = useNavigate();
-  
-  // Cargar proyectos desde la API
+
   useEffect(() => {
     const obtenerTareas = async () => {
       try {
-        const response = await axios.get(`${process.env.REACT_APP_API_URL}/tareas`);
-        console.log('Tareas obtenidos:', response.data); 
+        const userId = localStorage.getItem('id_usuario');
+        const userRole = localStorage.getItem('userRole');
+        console.log('userId:', userId, 'userRole:', userRole); // Verifica los valores enviados
+  
+        const response = await axios.get(`${process.env.REACT_APP_API_URL}/tareas`, {
+          params: { userId, userRole },
+        });
+  
+        console.log('Tareas obtenidas:', response.data); // Verifica la respuesta del backend
         setTareas(response.data);
       } catch (error) {
         console.error('Error al obtener tareas:', error);
@@ -23,49 +28,46 @@ const ListarTareas = () => {
     };
     obtenerTareas();
   }, []);
+ 
 
-  // Función para eliminar un proyecto
   const eliminarTarea = (id) => {
-    console.log("Eliminando tarea con ID:", id);  // Asegúrate de que el id sea correcto
-  
+    console.log('Eliminando tarea con ID:', id);
+
     if (id) {
-      axios.delete(`${process.env.REACT_APP_API_URL}/tarea/${id}`)
+      axios
+        .delete(`${process.env.REACT_APP_API_URL}/tarea/${id}`)
         .then((response) => {
           console.log('Tarea eliminada:', response.data);
-          // Filtra el tarea eliminada de la lista en el frontend
-          setTareas(prevTareas => prevTareas.filter(tarea => tarea.id_tarea !== id));
+          // Filtrar la tarea eliminada de la lista en el frontend
+          setTareas((prevTareas) =>
+            prevTareas.filter((tarea) => tarea.id_tarea !== id)
+          );
         })
         .catch((error) => {
-          console.error('Error al eliminar el tarea:', error);
+          console.error('Error al eliminar la tarea:', error);
         });
     } else {
-      console.error("El ID del tarea es indefinido");
+      console.error('El ID de la tarea es indefinido');
     }
   };
-  
-  
-  // Función para volver a la pantalla principal dependiendo del rol
+
   const handleVolver = () => {
     const storedRole = localStorage.getItem('userRole');
     if (storedRole === 'admin') {
-      navigate('/admin'); // Redirige al admin
+      navigate('/admin');
     } else {
-      navigate('/user'); // Redirige al usuario normal
+      navigate('/user');
     }
   };
 
   return (
     <div className="listar-usuarios">
-      {/* Botón de volver */}
       <button onClick={handleVolver} className="volver-button">
         Volver a la pantalla principal
       </button>
-
-      {/* Título y subtítulo */}
       <h2 className="titulo">Listar Tareas</h2>
       <h3 className="subtitulo">Detalles de las tareas</h3>
 
-      {/* Grilla de proyectos */}
       {mensaje && <p>{mensaje}</p>}
       <table className="tabla-usuarios">
         <thead>
@@ -89,20 +91,21 @@ const ListarTareas = () => {
               <td>{tarea.fecha_inicio}</td>
               <td>{tarea.fecha_fin}</td>
               <td>{tarea.estado}</td>
-              <td>{tarea.nombre_proyecto}</td> {/* Nombre del proyecto */}
-              <td>{tarea.nombre_usuario_asignado}</td> {/* Nombre del usuario */}
-              <td>{tarea.nombre_contraparte_tarea}</td> {/* Nombre de la contraparte */}
+              <td>{tarea.nombre_proyecto}</td>
+              <td>{tarea.nombre_usuario_asignado}</td>
+              <td>{tarea.nombre_contraparte_tarea}</td>
               <td>
-              <button
-            onClick={() => navigate(`/actualizartarea/${tarea.id_tarea}`)}
-            className="btn-accion"
-          >
-            Actualizar
-          </button>
+                <button
+                  onClick={() =>
+                    navigate(`/actualizartarea/${tarea.id_tarea}`)
+                  }
+                  className="btn-accion"
+                >
+                  Actualizar
+                </button>
                 <button onClick={() => eliminarTarea(tarea.id_tarea)}>
-              Eliminar
-            </button>
-
+                  Eliminar
+                </button>
               </td>
             </tr>
           ))}

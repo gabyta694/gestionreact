@@ -96,3 +96,19 @@ p {
 .password-container button:hover {
   background-color: #0056b3;
 }
+
+.error-message {
+  color: red;
+  font-size: 14px;
+  margin-top: 5px;
+  max-width: 100%; /* Asegura que no sean más anchas que su contenedor */
+  word-wrap: break-word; /* Permite que el texto se divida en varias líneas si es muy largo */
+  background-color: #f8d7da;
+  border: 1px solid #f5c6cb;
+  padding: 5px;
+  border-radius: 4px;
+  position: absolute;
+  margin-top: 5px;
+  width: 100%;
+  font-weight: bold;
+}

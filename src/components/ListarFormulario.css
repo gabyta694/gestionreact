@@ -101,3 +101,27 @@
     padding: 10px; /* Reducir el espacio de las celdas */
   }
 }
+
+.seleccion-usuario {
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: center; /* Centra horizontalmente */
+  align-items: center; /* Centra verticalmente, si es necesario */
+  width: 100%; /* Asegúrate de que el contenedor ocupe todo el ancho disponible */
+}
+
+#usuario-select {
+  width: 200px; /* Ancho del select */
+  padding: 8px;
+  font-size: 16px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  box-sizing: border-box; /* Asegura que el padding no expanda el tamaño */
+}
+
+.contenedor-indicadores {
+  display: flex;
+  flex-direction: column; /* Asegura que los elementos estén en columna */
+  gap: 3px; /* Ajusta el espacio entre los elementos */
+}
+

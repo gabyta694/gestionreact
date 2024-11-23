@@ -6,12 +6,14 @@ const User = () => {
   const navigate = useNavigate(); // Hook para navegación
   // Obtén el nombre del usuario desde el almacenamiento local
   const nombreUsuario = localStorage.getItem('nombre_usuario') || 'Administrador';
-  
+  //const idUsuario = localStorage.getItem('id_usuario') 
+
   const handleLogout = () => {
     // Elimina los datos del usuario del almacenamiento local
     localStorage.removeItem('token');
     localStorage.removeItem('userRole');
     localStorage.removeItem('nombre_usuario');
+    localStorage.removeItem('id_usuario');
     
     // Redirige al usuario a la página de inicio de sesión
     navigate('/login');
@@ -46,6 +48,7 @@ const User = () => {
           <h3>Desempeño</h3>
           <img src="/images/desempeno.ico" alt="Desempeno" className="icon-image" />
           <Link to="/listardesempeno">Ver Desempeño</Link>
+          <Link to="/indicadores">Indicadores</Link>
         </div>
 
       </div>

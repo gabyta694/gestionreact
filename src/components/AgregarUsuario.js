@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import './EstiloFormulario.css'
+import './EstiloFormulario.css';
 
 const AgregarUsuario = () => {
   const [nombreUsuario, setNombreUsuario] = useState('');
@@ -10,11 +10,43 @@ const AgregarUsuario = () => {
   const [correoUsuario, setCorreoUsuario] = useState('');
   const [password, setPassword] = useState('');
   const [rol, setRol] = useState('normal'); // Por defecto
-  const [mensaje, setMensaje] = useState('');
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
+
+  const validarRut = (rut) => {
+    // Validar que el RUT sea solo números
+    const rutRegex = /^[0-9]+$/;
+    return rutRegex.test(rut);
+  };
+
+  const validarDv = (dv) => {
+    // Validar que el DV sea un número o la letra "K", y que tenga una longitud de 1
+    return /^[0-9K]$/i.test(dv) && dv.length === 1;
+  };
+
+  const validarCorreo = (correo) => {
+    // Validar que el correo tenga un formato válido
+    const correoRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return correoRegex.test(correo);
+  };
 
   const agregarUsuario = async (e) => {
     e.preventDefault(); // Prevenir el comportamiento predeterminado del formulario
+
+    // Validar campos
+    if (!validarRut(rut)) {
+      alert('El RUT debe contener solo números.');
+      return;
+    }
+
+    if (!validarDv(dv)) {
+      alert('El Dígito Verificador debe ser un número o la letra "K", y tener exactamente un carácter.');
+      return;
+    }
+
+    if (!validarCorreo(correoUsuario)) {
+      alert('El correo no tiene un formato válido.');
+      return;
+    }
 
     try {
       const nuevoUsuario = {
@@ -27,10 +59,9 @@ const AgregarUsuario = () => {
       };
 
       const response = await axios.post(`${process.env.REACT_APP_API_URL}/usuario`, nuevoUsuario);
-      
-      // Aquí se asegura que la respuesta contenga el mensaje
+
       if (response.status === 201 && response.data) {
-        setMensaje(response.data.message || 'Usuario agregado exitosamente');
+        alert(response.data.message || 'Usuario agregado exitosamente');
 
         // Redirigir según el rol actual del usuario
         const storedRole = localStorage.getItem('userRole');
@@ -40,7 +71,7 @@ const AgregarUsuario = () => {
           navigate('/user'); // Redirigir al inicio del usuario normal
         }
       } else {
-        setMensaje('Hubo un problema al agregar el usuario.');
+        alert('Hubo un problema al agregar el usuario.');
       }
 
       // Reiniciar los campos del formulario
@@ -52,7 +83,7 @@ const AgregarUsuario = () => {
       setRol('normal'); // Reiniciar a valor por defecto
     } catch (error) {
       console.error('Error al agregar usuario:', error);
-      setMensaje('Error al agregar usuario');
+      alert('Error al agregar usuario');
     }
   };
 
@@ -85,7 +116,7 @@ const AgregarUsuario = () => {
           <input
             type="text"
             value={rut}
-            onChange={(e) => setRut(e.target.value)}
+            onChange={(e) => setRut(e.target.value.replace(/[^0-9]/g, ''))}
             required
           />
         </div>
@@ -94,7 +125,7 @@ const AgregarUsuario = () => {
           <input
             type="text"
             value={dv}
-            onChange={(e) => setDv(e.target.value)}
+            onChange={(e) => setDv(e.target.value.replace(/[^0-9Kk]/g, ''))}
             required
           />
         </div>
@@ -123,14 +154,12 @@ const AgregarUsuario = () => {
             <option value="admin">Admin</option>
           </select>
         </div>
-        
+
         <div className="button-group">
           <button type="submit">Agregar Usuario</button>
           <button type="button" onClick={handleCancel}>Cancelar</button>
         </div>
-      
       </form>
-      {mensaje && <p>{mensaje}</p>} 
     </div>
   );
 };

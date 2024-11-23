@@ -51,6 +51,13 @@ const AgregarTarea = () => {
   // Manejar envío del formulario
   const handleSubmit = async (e) => {
     e.preventDefault();
+    
+    // Validar que fecha_inicio < fecha_fin
+    if (new Date(formData.fecha_inicio) >= new Date(formData.fecha_fin)) {
+      alert('La fecha de inicio debe ser anterior a la fecha de fin.');
+      return;
+  }
+  
     try {
       const response = await axios.post(`${process.env.REACT_APP_API_URL}/tarea`, formData);
       if (response.status === 201) {
